@@ -9,7 +9,7 @@ const through = require('through2')
 const Parse = require('fast-json-parse')
 const util = require('util')
 
-bugsnap.register(process.env.BUGSNAG_API)
+bugsnap.register(process.env.BUGSNAP_API)
 
 // test if the line is actually in pino log format
 // taken from https://github.com/mcollina/pino/blob/master/pretty.js#49
@@ -43,13 +43,13 @@ let tranform = through.obj(function (record, enc, cb) {
   }
 
   // create a err instance but use the stack trace from the record
-  let err = new Error(record.msg + ' ' + record.requestId)
+  let err = new Error(record.msg + ' ' + 'worker')
   err.stack = record.stack
 
   // kick off
   bugsnap.notify(err, {
     subsystem: {
-      requestId: record.requestId
+      requestId: 'worker'
     }
   })
 
